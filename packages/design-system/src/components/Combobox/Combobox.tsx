@@ -140,8 +140,8 @@ const Combobox = React.forwardRef<ComboboxInputElement, ComboboxProps>(
     /**
      * Used for the intersection observer
      */
-    const viewportRef = React.useRef<HTMLDivElement>(null);
     const triggerRef = React.useRef<HTMLInputElement>(null!);
+    const scrollViewportRef = React.useRef<HTMLDivElement>(null);
 
     const composedTriggerRefs = useComposedRefs(triggerRef, forwardedRef);
 
@@ -200,7 +200,7 @@ const Combobox = React.forwardRef<ComboboxInputElement, ComboboxProps>(
     const generatedIntersectionId = useId();
     const intersectionId = `intersection-${stripReactIdOfColon(generatedIntersectionId)}`;
 
-    useIntersection(viewportRef, handleReachEnd, {
+    useIntersection(scrollViewportRef, handleReachEnd, {
       selectorToWatch: `#${intersectionId}`,
       /**
        * We need to know when the select is open because only then will viewportRef
@@ -303,8 +303,8 @@ const Combobox = React.forwardRef<ComboboxInputElement, ComboboxProps>(
         </Trigger>
         <ComboboxPrimitive.Portal>
           <Content sideOffset={4}>
-            <ScrollArea>
-              <ComboboxPrimitive.Viewport ref={viewportRef}>
+            <ScrollArea viewportRef={scrollViewportRef}>
+              <ComboboxPrimitive.Viewport>
                 <Box padding={1}>
                   {shouldVirtualizeOptions ? (
                     <VirtualizedList itemCount={childrenCount}>{children}</VirtualizedList>
